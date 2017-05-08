@@ -5,8 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -29,51 +31,58 @@ public class RedditThread {
 	@JsonProperty("contest_mode")
 	private Boolean contestMode;
 	@JsonProperty("banned_by")
-	private Object bannedBy;
+	private String bannedBy;
 	@JsonProperty("media_embed")
+	@Transient
 	private MediaEmbed mediaEmbed;
 	@JsonProperty("subreddit")
 	private String subreddit;
 	@JsonProperty("selftext_html")
-	private Object selftextHtml;
+	@Column(columnDefinition="TEXT")
+	private String selftextHtml;
 	@JsonProperty("selftext")
+	@Column(columnDefinition="TEXT")
 	private String selftext;
 	@JsonProperty("likes")
-	private Object likes;
+	private String likes;
 	@JsonProperty("suggested_sort")
-	private Object suggestedSort;
+	private String suggestedSort;
 	@JsonProperty("user_reports")
-	private List<Object> userReports = null;
+	@Transient
+	private List<String> userReports = null;
 	@JsonProperty("secure_media")
+	@Transient
 	private Object secureMedia;
 	@JsonProperty("link_flair_text")
-	private Object linkFlairText;
+	private String linkFlairText;
 	
 	@Id
 	@JsonProperty("id")
 	private String id;
 	@JsonProperty("view_count")
-	private Object viewCount;
+	private String viewCount;
 	@JsonProperty("secure_media_embed")
+	@Transient
 	private SecureMediaEmbed secureMediaEmbed;
 	@JsonProperty("clicked")
 	private Boolean clicked;
 	@JsonProperty("score")
 	private Integer score;
 	@JsonProperty("report_reasons")
-	private Object reportReasons;
+	private String reportReasons;
 	@JsonProperty("author")
 	private String author;
 	@JsonProperty("saved")
 	private Boolean saved;
 	@JsonProperty("mod_reports")
-	private List<Object> modReports = null;
+	@Transient
+	private List<String> modReports = null;
 	@JsonProperty("name")
 	private String name;
 	@JsonProperty("subreddit_name_prefixed")
 	private String subredditNamePrefixed;
 	@JsonProperty("approved_by")
-	private Object approvedBy;
+	private String approvedBy;
 	@JsonProperty("over_18")
 	private Boolean over18;
 	@JsonProperty("domain")
@@ -85,11 +94,11 @@ public class RedditThread {
 	@JsonProperty("subreddit_id")
 	private String subredditId;
 	@JsonProperty("edited")
-	private Object edited;
+	private String edited;
 	@JsonProperty("link_flair_css_class")
-	private Object linkFlairCssClass;
+	private String linkFlairCssClass;
 	@JsonProperty("author_flair_css_class")
-	private Object authorFlairCssClass;
+	private String authorFlairCssClass;
 	@JsonProperty("gilded")
 	private Integer gilded;
 	@JsonProperty("downs")
@@ -99,7 +108,7 @@ public class RedditThread {
 	@JsonProperty("archived")
 	private Boolean archived;
 	@JsonProperty("removal_reason")
-	private Object removalReason;
+	private String removalReason;
 	@JsonProperty("can_gild")
 	private Boolean canGild;
 	@JsonProperty("is_self")
@@ -111,7 +120,7 @@ public class RedditThread {
 	@JsonProperty("permalink")
 	private String permalink;
 	@JsonProperty("num_reports")
-	private Object numReports;
+	private String numReports;
 	@JsonProperty("locked")
 	private Boolean locked;
 	@JsonProperty("stickied")
@@ -121,7 +130,7 @@ public class RedditThread {
 	@JsonProperty("url")
 	private String url;
 	@JsonProperty("author_flair_text")
-	private Object authorFlairText;
+	private String authorFlairText;
 	@JsonProperty("quarantine")
 	private Boolean quarantine;
 	@JsonProperty("title")
@@ -129,8 +138,9 @@ public class RedditThread {
 	@JsonProperty("created_utc")
 	private Double createdUtc;
 	@JsonProperty("distinguished")
-	private Object distinguished;
+	private String distinguished;
 	@JsonProperty("media")
+	@Transient
 	private Object media;
 	@JsonProperty("num_comments")
 	private Integer numComments;
@@ -152,12 +162,12 @@ public class RedditThread {
 	}
 
 	@JsonProperty("banned_by")
-	public Object getBannedBy() {
+	public String getBannedBy() {
 		return bannedBy;
 	}
 
 	@JsonProperty("banned_by")
-	public void setBannedBy(Object bannedBy) {
+	public void setBannedBy(String bannedBy) {
 		this.bannedBy = bannedBy;
 	}
 
@@ -182,12 +192,12 @@ public class RedditThread {
 	}
 
 	@JsonProperty("selftext_html")
-	public Object getSelftextHtml() {
+	public String getSelftextHtml() {
 		return selftextHtml;
 	}
 
 	@JsonProperty("selftext_html")
-	public void setSelftextHtml(Object selftextHtml) {
+	public void setSelftextHtml(String selftextHtml) {
 		this.selftextHtml = selftextHtml;
 	}
 
@@ -202,32 +212,32 @@ public class RedditThread {
 	}
 
 	@JsonProperty("likes")
-	public Object getLikes() {
+	public String getLikes() {
 		return likes;
 	}
 
 	@JsonProperty("likes")
-	public void setLikes(Object likes) {
+	public void setLikes(String likes) {
 		this.likes = likes;
 	}
 
 	@JsonProperty("suggested_sort")
-	public Object getSuggestedSort() {
+	public String getSuggestedSort() {
 		return suggestedSort;
 	}
 
 	@JsonProperty("suggested_sort")
-	public void setSuggestedSort(Object suggestedSort) {
+	public void setSuggestedSort(String suggestedSort) {
 		this.suggestedSort = suggestedSort;
 	}
 
 	@JsonProperty("user_reports")
-	public List<Object> getUserReports() {
+	public List<String> getUserReports() {
 		return userReports;
 	}
 
 	@JsonProperty("user_reports")
-	public void setUserReports(List<Object> userReports) {
+	public void setUserReports(List<String> userReports) {
 		this.userReports = userReports;
 	}
 
@@ -242,12 +252,12 @@ public class RedditThread {
 	}
 
 	@JsonProperty("link_flair_text")
-	public Object getLinkFlairText() {
+	public String getLinkFlairText() {
 		return linkFlairText;
 	}
 
 	@JsonProperty("link_flair_text")
-	public void setLinkFlairText(Object linkFlairText) {
+	public void setLinkFlairText(String linkFlairText) {
 		this.linkFlairText = linkFlairText;
 	}
 
@@ -262,12 +272,12 @@ public class RedditThread {
 	}
 
 	@JsonProperty("view_count")
-	public Object getViewCount() {
+	public String getViewCount() {
 		return viewCount;
 	}
 
 	@JsonProperty("view_count")
-	public void setViewCount(Object viewCount) {
+	public void setViewCount(String viewCount) {
 		this.viewCount = viewCount;
 	}
 
@@ -302,12 +312,12 @@ public class RedditThread {
 	}
 
 	@JsonProperty("report_reasons")
-	public Object getReportReasons() {
+	public String getReportReasons() {
 		return reportReasons;
 	}
 
 	@JsonProperty("report_reasons")
-	public void setReportReasons(Object reportReasons) {
+	public void setReportReasons(String reportReasons) {
 		this.reportReasons = reportReasons;
 	}
 
@@ -332,12 +342,12 @@ public class RedditThread {
 	}
 
 	@JsonProperty("mod_reports")
-	public List<Object> getModReports() {
+	public List<String> getModReports() {
 		return modReports;
 	}
 
 	@JsonProperty("mod_reports")
-	public void setModReports(List<Object> modReports) {
+	public void setModReports(List<String> modReports) {
 		this.modReports = modReports;
 	}
 
@@ -362,12 +372,12 @@ public class RedditThread {
 	}
 
 	@JsonProperty("approved_by")
-	public Object getApprovedBy() {
+	public String getApprovedBy() {
 		return approvedBy;
 	}
 
 	@JsonProperty("approved_by")
-	public void setApprovedBy(Object approvedBy) {
+	public void setApprovedBy(String approvedBy) {
 		this.approvedBy = approvedBy;
 	}
 
@@ -422,32 +432,32 @@ public class RedditThread {
 	}
 
 	@JsonProperty("edited")
-	public Object getEdited() {
+	public String getEdited() {
 		return edited;
 	}
 
 	@JsonProperty("edited")
-	public void setEdited(Object edited) {
+	public void setEdited(String edited) {
 		this.edited = edited;
 	}
 
 	@JsonProperty("link_flair_css_class")
-	public Object getLinkFlairCssClass() {
+	public String getLinkFlairCssClass() {
 		return linkFlairCssClass;
 	}
 
 	@JsonProperty("link_flair_css_class")
-	public void setLinkFlairCssClass(Object linkFlairCssClass) {
+	public void setLinkFlairCssClass(String linkFlairCssClass) {
 		this.linkFlairCssClass = linkFlairCssClass;
 	}
 
 	@JsonProperty("author_flair_css_class")
-	public Object getAuthorFlairCssClass() {
+	public String getAuthorFlairCssClass() {
 		return authorFlairCssClass;
 	}
 
 	@JsonProperty("author_flair_css_class")
-	public void setAuthorFlairCssClass(Object authorFlairCssClass) {
+	public void setAuthorFlairCssClass(String authorFlairCssClass) {
 		this.authorFlairCssClass = authorFlairCssClass;
 	}
 
@@ -492,12 +502,12 @@ public class RedditThread {
 	}
 
 	@JsonProperty("removal_reason")
-	public Object getRemovalReason() {
+	public String getRemovalReason() {
 		return removalReason;
 	}
 
 	@JsonProperty("removal_reason")
-	public void setRemovalReason(Object removalReason) {
+	public void setRemovalReason(String removalReason) {
 		this.removalReason = removalReason;
 	}
 
@@ -552,12 +562,12 @@ public class RedditThread {
 	}
 
 	@JsonProperty("num_reports")
-	public Object getNumReports() {
+	public String getNumReports() {
 		return numReports;
 	}
 
 	@JsonProperty("num_reports")
-	public void setNumReports(Object numReports) {
+	public void setNumReports(String numReports) {
 		this.numReports = numReports;
 	}
 
@@ -602,12 +612,12 @@ public class RedditThread {
 	}
 
 	@JsonProperty("author_flair_text")
-	public Object getAuthorFlairText() {
+	public String getAuthorFlairText() {
 		return authorFlairText;
 	}
 
 	@JsonProperty("author_flair_text")
-	public void setAuthorFlairText(Object authorFlairText) {
+	public void setAuthorFlairText(String authorFlairText) {
 		this.authorFlairText = authorFlairText;
 	}
 
@@ -642,12 +652,12 @@ public class RedditThread {
 	}
 
 	@JsonProperty("distinguished")
-	public Object getDistinguished() {
+	public String getDistinguished() {
 		return distinguished;
 	}
 
 	@JsonProperty("distinguished")
-	public void setDistinguished(Object distinguished) {
+	public void setDistinguished(String distinguished) {
 		this.distinguished = distinguished;
 	}
 
