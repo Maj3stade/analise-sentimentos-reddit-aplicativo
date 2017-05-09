@@ -38,19 +38,21 @@ public class Requestor {
 		JsonNode node = objectMapper.readValue(result.toString(), JsonNode.class);
 		JsonNode jacksonThreads = node.get("data").get("children");
 		Iterator<JsonNode> threadIterator = jacksonThreads.elements();
-		while(threadIterator.hasNext()) {
+		EntityManager entityManager = RedditManager.getEntityManagerFactory().createEntityManager();
+
+		entityManager.getTransaction().begin();  
+	    while(threadIterator.hasNext()) {
 			JsonNode iteratorThread = (JsonNode) threadIterator.next();
 			RedditThread thread = objectMapper.readValue(iteratorThread.get("data").toString(), RedditThread.class);
 			
-			EntityManager entityManager = RedditManager.getEntityManagerFactory().createEntityManager();
-		    
-		    entityManager.getTransaction().begin();    
-		    entityManager.persist(thread);
-			entityManager.getTransaction().commit();  
-			
-			entityManager.close();
+			entityManager.persist(thread);
+			System.out.println(thread.getPermalink());
 
 	    }
+
+		entityManager.getTransaction().commit();  
+		
+		entityManager.close();
 	    /*System.out.println(node.toString());
 		RedditThread thread = objectMapper.readValue(node.toString(), RedditThread.class);
 		System.out.println(thread.getSubreddit());*/
