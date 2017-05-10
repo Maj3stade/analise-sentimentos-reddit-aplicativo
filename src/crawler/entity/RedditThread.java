@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 	"author_flair_css_class", "gilded", "downs", "brand_safe", "archived", "removal_reason", "can_gild", "is_self",
 	"hide_score", "spoiler", "permalink", "num_reports", "locked", "stickied", "created", "url",
 	"author_flair_text", "quarantine", "title", "created_utc", "distinguished", "media", "num_comments", "visited",
-	"subreddit_type", "ups" })
+	"subreddit_type", "ups", "upvote_ratio" })
 public class RedditThread {
 
 	@JsonProperty("contest_mode")
@@ -34,7 +34,7 @@ public class RedditThread {
 	private String bannedBy;
 	@JsonProperty("media_embed")
 	@Transient
-	private MediaEmbed mediaEmbed;
+	private Object mediaEmbed;
 	@JsonProperty("subreddit")
 	private String subreddit;
 	@JsonProperty("selftext_html")
@@ -63,7 +63,7 @@ public class RedditThread {
 	private String viewCount;
 	@JsonProperty("secure_media_embed")
 	@Transient
-	private SecureMediaEmbed secureMediaEmbed;
+	private Object secureMediaEmbed;
 	@JsonProperty("clicked")
 	private Boolean clicked;
 	@JsonProperty("score")
@@ -151,6 +151,9 @@ public class RedditThread {
 	@JsonProperty("ups")
 	private Integer ups;
 	
+	@JsonProperty("upvote_ratio")
+	private Double upvote_ratio;
+	
 	@JsonProperty("contest_mode")
 	public Boolean getContestMode() {
 		return contestMode;
@@ -172,12 +175,12 @@ public class RedditThread {
 	}
 
 	@JsonProperty("media_embed")
-	public MediaEmbed getMediaEmbed() {
+	public Object getMediaEmbed() {
 		return mediaEmbed;
 	}
 
 	@JsonProperty("media_embed")
-	public void setMediaEmbed(MediaEmbed mediaEmbed) {
+	public void setMediaEmbed(Object mediaEmbed) {
 		this.mediaEmbed = mediaEmbed;
 	}
 
@@ -282,12 +285,12 @@ public class RedditThread {
 	}
 
 	@JsonProperty("secure_media_embed")
-	public SecureMediaEmbed getSecureMediaEmbed() {
+	public Object getSecureMediaEmbed() {
 		return secureMediaEmbed;
 	}
 
 	@JsonProperty("secure_media_embed")
-	public void setSecureMediaEmbed(SecureMediaEmbed secureMediaEmbed) {
+	public void setSecureMediaEmbed(Object secureMediaEmbed) {
 		this.secureMediaEmbed = secureMediaEmbed;
 	}
 
