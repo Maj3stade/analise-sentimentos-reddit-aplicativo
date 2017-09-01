@@ -13,39 +13,46 @@ import javax.persistence.Transient;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 @Entity
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 @JsonPropertyOrder({ "contest_mode", "banned_by", "media_embed", "subreddit", "selftext_html", "selftext", "likes",
-	"suggested_sort", "user_reports", "secure_media", "link_flair_text", "id", "view_count", "secure_media_embed",
-	"clicked", "score", "report_reasons", "author", "saved", "mod_reports", "name", "subreddit_name_prefixed",
-	"approved_by", "over_18", "domain", "hidden", "thumbnail", "subreddit_id", "edited", "link_flair_css_class",
-	"author_flair_css_class", "gilded", "downs", "brand_safe", "archived", "removal_reason", "can_gild", "is_self",
-	"hide_score", "spoiler", "permalink", "num_reports", "locked", "stickied", "created", "url",
-	"author_flair_text", "quarantine", "title", "created_utc", "distinguished", "media", "num_comments", "visited",
-	"subreddit_type", "ups", "upvote_ratio" })
+		"suggested_sort", "user_reports", "secure_media", "link_flair_text", "id", "view_count", "secure_media_embed",
+		"clicked", "score", "report_reasons", "author", "saved", "mod_reports", "name", "subreddit_name_prefixed",
+		"approved_by", "over_18", "domain", "hidden", "thumbnail", "subreddit_id", "edited", "link_flair_css_class",
+		"author_flair_css_class", "gilded", "downs", "brand_safe", "archived", "removal_reason", "can_gild", "is_self",
+		"hide_score", "spoiler", "permalink", "num_reports", "locked", "stickied", "created", "url",
+		"author_flair_text", "quarantine", "title", "created_utc", "distinguished", "media", "num_comments", "visited",
+		"subreddit_type", "ups", "upvote_ratio" })
 public class RedditThread {
 
 	@JsonProperty("contest_mode")
 	private Boolean contestMode;
 	@JsonProperty("banned_by")
+	
 	private String bannedBy;
 	@JsonProperty("media_embed")
 	@Transient
 	private Object mediaEmbed;
 	@JsonProperty("subreddit")
+	
 	private String subreddit;
 	@JsonProperty("selftext_html")
-	@Column(columnDefinition="TEXT")
+	@Column(columnDefinition = "TEXT")
 	private String selftextHtml;
 	@JsonProperty("selftext")
-	@Column(columnDefinition="TEXT")
+	@Column(columnDefinition = "TEXT")
 	private String selftext;
 	@JsonProperty("likes")
+	
 	private String likes;
 	@JsonProperty("suggested_sort")
+	
 	private String suggestedSort;
 	@JsonProperty("user_reports")
 	@Transient
@@ -54,12 +61,15 @@ public class RedditThread {
 	@Transient
 	private Object secureMedia;
 	@JsonProperty("link_flair_text")
-	private String linkFlairText;
 	
+	private String linkFlairText;
+
 	@Id
 	@JsonProperty("id")
+	
 	private String id;
 	@JsonProperty("view_count")
+	
 	private String viewCount;
 	@JsonProperty("secure_media_embed")
 	@Transient
@@ -69,8 +79,10 @@ public class RedditThread {
 	@JsonProperty("score")
 	private Integer score;
 	@JsonProperty("report_reasons")
+	
 	private String reportReasons;
 	@JsonProperty("author")
+	
 	private String author;
 	@JsonProperty("saved")
 	private Boolean saved;
@@ -78,26 +90,35 @@ public class RedditThread {
 	@Transient
 	private List<String> modReports = null;
 	@JsonProperty("name")
+	
 	private String name;
 	@JsonProperty("subreddit_name_prefixed")
+	
 	private String subredditNamePrefixed;
 	@JsonProperty("approved_by")
+	
 	private String approvedBy;
 	@JsonProperty("over_18")
 	private Boolean over18;
 	@JsonProperty("domain")
+	
 	private String domain;
 	@JsonProperty("hidden")
 	private Boolean hidden;
 	@JsonProperty("thumbnail")
+	
 	private String thumbnail;
 	@JsonProperty("subreddit_id")
+	
 	private String subredditId;
 	@JsonProperty("edited")
+	
 	private String edited;
 	@JsonProperty("link_flair_css_class")
+	
 	private String linkFlairCssClass;
 	@JsonProperty("author_flair_css_class")
+	
 	private String authorFlairCssClass;
 	@JsonProperty("gilded")
 	private Integer gilded;
@@ -108,6 +129,7 @@ public class RedditThread {
 	@JsonProperty("archived")
 	private Boolean archived;
 	@JsonProperty("removal_reason")
+	
 	private String removalReason;
 	@JsonProperty("can_gild")
 	private Boolean canGild;
@@ -118,8 +140,10 @@ public class RedditThread {
 	@JsonProperty("spoiler")
 	private Boolean spoiler;
 	@JsonProperty("permalink")
+	
 	private String permalink;
 	@JsonProperty("num_reports")
+	
 	private String numReports;
 	@JsonProperty("locked")
 	private Boolean locked;
@@ -128,16 +152,20 @@ public class RedditThread {
 	@JsonProperty("created")
 	private Double created;
 	@JsonProperty("url")
+	
 	private String url;
 	@JsonProperty("author_flair_text")
+	
 	private String authorFlairText;
 	@JsonProperty("quarantine")
 	private Boolean quarantine;
 	@JsonProperty("title")
+	
 	private String title;
 	@JsonProperty("created_utc")
 	private Double createdUtc;
 	@JsonProperty("distinguished")
+	
 	private String distinguished;
 	@JsonProperty("media")
 	@Transient
@@ -147,13 +175,14 @@ public class RedditThread {
 	@JsonProperty("visited")
 	private Boolean visited;
 	@JsonProperty("subreddit_type")
+	
 	private String subredditType;
 	@JsonProperty("ups")
 	private Integer ups;
-	
+
 	@JsonProperty("upvote_ratio")
 	private Double upvote_ratio;
-	
+
 	@JsonProperty("contest_mode")
 	public Boolean getContestMode() {
 		return contestMode;
@@ -714,5 +743,4 @@ public class RedditThread {
 		this.ups = ups;
 	}
 
-	
 }

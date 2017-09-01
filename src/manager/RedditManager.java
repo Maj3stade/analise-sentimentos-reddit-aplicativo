@@ -6,8 +6,8 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.RollbackException;
 
-import crawler.Requestor;
 import crawler.entity.RedditPost;
 import crawler.entity.RedditThread;
 
@@ -30,13 +30,18 @@ public class RedditManager {
 		}
 	}
 
+	public static List<RedditPost> getAllPosts(){
+		List<RedditPost> postList = getEntityManagerFactory().createEntityManager().createQuery(
+	            "SELECT rp FROM RedditPost rp").getResultList();
+		return postList;
+	}
 	public static void saveThreads(List<RedditThread> threadList) {
 		EntityManager entityManager = getEntityManagerFactory().createEntityManager();
 		entityManager.getTransaction().begin();  
 		
 		
 		for (Iterator<RedditThread> iterator = threadList.iterator(); iterator.hasNext();) {
-			RedditThread redditThread = (RedditThread) iterator.next();
+			RedditThread redditThread = iterator.next();
 
 			entityManager.persist(redditThread);
 
@@ -50,19 +55,27 @@ public class RedditManager {
 
 	public static void savePosts(List<RedditPost> postList) {
 		EntityManager entityManager = getEntityManagerFactory().createEntityManager();
-		entityManager.getTransaction().begin();  
-		
+		int i = 0;
 		
 		for (Iterator<RedditPost> iterator = postList.iterator(); iterator.hasNext();) {
-			RedditPost redditThread = (RedditPost) iterator.next();
+			i++;
+			System.out.println("Comentário " + Integer.toString(i) + " de " + Integer.toString((postList.size())));
+			entityManager.getTransaction().begin();  
+			
+			RedditPost redditThread = iterator.next();
 
 			entityManager.persist(redditThread);
+			try{
+				entityManager.getTransaction().commit();
+			} catch (RollbackException e) {
+				System.out.println("Não foi possível salvar o comentário.");
+			}
 
 
 		}
-
-		entityManager.getTransaction().commit();
 		entityManager.close();
+		
+		
 		
 	}
 

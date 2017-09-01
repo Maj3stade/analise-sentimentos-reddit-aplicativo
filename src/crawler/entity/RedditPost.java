@@ -94,67 +94,90 @@ public class RedditPost {
     @JsonProperty("contest_mode")
     private Boolean contestMode;
     @JsonProperty("banned_by")
+    
     private String bannedBy;
     @JsonProperty("media_embed")
     @Transient
-    private String mediaEmbed;
+    private Object mediaEmbed;
     @JsonProperty("subreddit")
+    
     private String subreddit;
     @JsonProperty("selftext_html")
+    
     private String selftextHtml;
     @JsonProperty("selftext")
+    
     private String selftext;
     @JsonProperty("likes")
+    
     private String likes;
     @JsonProperty("suggested_sort")
+    
     private String suggestedSort;
     @JsonProperty("user_reports")
 	@Transient
     private List<String> userReports = null;
     @JsonProperty("secure_media")
     @Transient
-    private String secureMedia;
+    private Object secureMedia;
     @JsonProperty("saved")
     private Boolean saved;
     @JsonProperty("id")
     @Id
+    
     private String id;
     @JsonProperty("view_count")
+    
     private String viewCount;
+    
     @JsonProperty("secure_media_embed")
-    private String secureMediaEmbed;
+    @Transient
+    @JsonIgnore
+    private Object secureMediaEmbed;
     @JsonProperty("clicked")
     private Boolean clicked;
     @JsonProperty("score")
     private Integer score;
+    
     @JsonProperty("report_reasons")
     private String reportReasons;
+    
     @JsonProperty("author")
     private String author;
+    
     @JsonProperty("link_flair_text")
     private String linkFlairText;
+    
     @JsonProperty("subreddit_name_prefixed")
     private String subredditNamePrefixed;
+    
     @JsonProperty("approved_by")
     private String approvedBy;
     @JsonProperty("over_18")
     private Boolean over18;
+    
     @JsonProperty("domain")
     private String domain;
     @JsonProperty("hidden")
     private Boolean hidden;
+    
     @JsonProperty("preview")
-    private String preview;
+    private Object preview;
     @JsonProperty("num_comments")
     private Integer numComments;
+    
     @JsonProperty("thumbnail")
     private String thumbnail;
+    
     @JsonProperty("subreddit_id")
     private String subredditId;
+    
     @JsonProperty("edited")
     private String edited;
+    
     @JsonProperty("link_flair_css_class")
     private String linkFlairCssClass;
+    
     @JsonProperty("author_flair_css_class")
     private String authorFlairCssClass;
     @JsonProperty("gilded")
@@ -165,8 +188,10 @@ public class RedditPost {
     private Boolean brandSafe;
     @JsonProperty("archived")
     private Boolean archived;
+    
     @JsonProperty("removal_reason")
     private String removalReason;
+    
     @JsonProperty("post_hint")
     private String postHint;
     @JsonProperty("stickied")
@@ -179,22 +204,28 @@ public class RedditPost {
     private Boolean hideScore;
     @JsonProperty("spoiler")
     private Boolean spoiler;
+    
     @JsonProperty("permalink")
     private String permalink;
+    
     @JsonProperty("subreddit_type")
     private String subredditType;
     @JsonProperty("locked")
     private Boolean locked;
+    
     @JsonProperty("name")
     private String name;
     @JsonProperty("created")
     private Double created;
     @JsonProperty("url")
+    
     private String url;
     @JsonProperty("author_flair_text")
+    
     private String authorFlairText;
     @JsonProperty("quarantine")
     private Boolean quarantine;
+    
     @JsonProperty("title")
     private String title;
     @JsonProperty("created_utc")
@@ -202,23 +233,29 @@ public class RedditPost {
     @JsonProperty("ups")
     private Integer ups;
     @JsonProperty("media")
-    private String media;
+    
+    private Object media;
     @JsonProperty("upvote_ratio")
     private Double upvoteRatio;
     @JsonProperty("mod_reports")
-	@Transient
+    
+    @Transient
     private List<String> modReports = null;
     @JsonProperty("visited")
     private Boolean visited;
+    
     @JsonProperty("num_reports")
     private String numReports;
+    
     @JsonProperty("distinguished")
     private String distinguished;
+    
     @JsonProperty("link_id")
     private String linkId;
     @JsonProperty("replies")
     @Transient
     private Object replies;
+    
     @JsonProperty("parent_id")
     private String parentId;
     @JsonProperty("controversiality")
@@ -241,6 +278,22 @@ public class RedditPost {
     @JsonIgnore
 	@Transient
     private Map<String, String> additionalProperties = new HashMap<String, String>();
+    
+    @JsonIgnore
+	@Transient
+    private Double valiantScore;
+
+    @JsonIgnore
+	@Transient
+    private Double valiantNeuScore;
+
+    @JsonIgnore
+	@Transient
+    private Double valiantPosScore;
+
+    @JsonIgnore
+	@Transient
+    private Double valiantNegScore;
 
     @JsonProperty("contest_mode")
     public Boolean getContestMode() {
@@ -263,12 +316,12 @@ public class RedditPost {
     }
 
     @JsonProperty("media_embed")
-    public String getMediaEmbed() {
+    public Object getMediaEmbed() {
         return mediaEmbed;
     }
 
     @JsonProperty("media_embed")
-    public void setMediaEmbed(String mediaEmbed) {
+    public void setMediaEmbed(Object mediaEmbed) {
         this.mediaEmbed = mediaEmbed;
     }
 
@@ -333,12 +386,12 @@ public class RedditPost {
     }
 
     @JsonProperty("secure_media")
-    public String getSecureMedia() {
+    public Object getSecureMedia() {
         return secureMedia;
     }
 
     @JsonProperty("secure_media")
-    public void setSecureMedia(String secureMedia) {
+    public void setSecureMedia(Object secureMedia) {
         this.secureMedia = secureMedia;
     }
 
@@ -373,12 +426,12 @@ public class RedditPost {
     }
 
     @JsonProperty("secure_media_embed")
-    public String getSecureMediaEmbed() {
+    public Object getSecureMediaEmbed() {
         return secureMediaEmbed;
     }
 
     @JsonProperty("secure_media_embed")
-    public void setSecureMediaEmbed(String secureMediaEmbed) {
+    public void setSecureMediaEmbed(Object secureMediaEmbed) {
         this.secureMediaEmbed = secureMediaEmbed;
     }
 
@@ -483,12 +536,12 @@ public class RedditPost {
     }
 
     @JsonProperty("preview")
-    public String getPreview() {
+    public Object getPreview() {
         return preview;
     }
 
     @JsonProperty("preview")
-    public void setPreview(String preview) {
+    public void setPreview(Object preview) {
         this.preview = preview;
     }
 
@@ -773,12 +826,12 @@ public class RedditPost {
     }
 
     @JsonProperty("media")
-    public String getMedia() {
+    public Object getMedia() {
         return media;
     }
 
     @JsonProperty("media")
-    public void setMedia(String media) {
+    public void setMedia(Object media) {
         this.media = media;
     }
 
