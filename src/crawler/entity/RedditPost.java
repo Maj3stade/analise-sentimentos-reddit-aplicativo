@@ -162,6 +162,7 @@ public class RedditPost {
     private Boolean hidden;
     
     @JsonProperty("preview")
+    @Transient
     private Object preview;
     @JsonProperty("num_comments")
     private Integer numComments;
@@ -233,7 +234,7 @@ public class RedditPost {
     @JsonProperty("ups")
     private Integer ups;
     @JsonProperty("media")
-    
+    @Transient
     private Object media;
     @JsonProperty("upvote_ratio")
     private Double upvoteRatio;
@@ -280,20 +281,11 @@ public class RedditPost {
     private Map<String, String> additionalProperties = new HashMap<String, String>();
     
     @JsonIgnore
-	@Transient
-    private Double valiantScore;
+	private Double valiantScore;
 
     @JsonIgnore
 	@Transient
-    private Double valiantNeuScore;
-
-    @JsonIgnore
-	@Transient
-    private Double valiantPosScore;
-
-    @JsonIgnore
-	@Transient
-    private Double valiantNegScore;
+    private Boolean isCorrect;
 
     @JsonProperty("contest_mode")
     public Boolean getContestMode() {

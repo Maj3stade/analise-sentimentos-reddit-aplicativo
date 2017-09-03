@@ -29,7 +29,7 @@ import manager.RedditManager;
 
 public class Requestor {
 
-	private static String getRedditJson(String sUrl, String queryParameters) throws IOException {
+	private static String getRedditJson(String sUrl, String queryParameters) throws IOException, MalformedURLException {
 		sUrl = sUrl + ".json";
 		if (queryParameters != "")
 			sUrl = sUrl + "?" + queryParameters;
