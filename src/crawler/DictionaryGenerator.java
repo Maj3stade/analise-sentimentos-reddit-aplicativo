@@ -29,6 +29,7 @@ import edu.stanford.nlp.trees.Tree;
 import edu.stanford.nlp.trees.TreeCoreAnnotations.TreeAnnotation;
 import edu.stanford.nlp.util.CoreMap;
 import manager.RedditManager;
+import vader.lexicon.English;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
@@ -49,106 +50,135 @@ public class DictionaryGenerator {
 		try {
 			new RedditProperties();
 			List<String> authorList = RedditManager.getAllAuthorsByParentId("t3_5qqa51");
-			int authorCount = 0, postCount = 0;
-			Properties props = new Properties();
-			props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, depparse");
-			StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
 			
+			int authorCount = 0, postCount = 0;
 			for (String author : authorList) {
+				List<String> targetList = new ArrayList();
+				List<String> opinionList = new ArrayList();
 				authorCount = authorCount + 1;
-				System.out.println("Autor " + authorCount + " de: " + authorList.size());
-				
-				if(author.equals("[deleted]"))
-				{	
+				//System.out.println("Autor " + authorCount + " de: " + authorList.size());
+
+				if (author.equals("[deleted]")) {
 					System.out.println("Autor Removido.");
 					continue;
 				}
-				
-				
+
 				List<RedditPost> postList = RedditManager.getAllPostsByAuthor(author);
 				postCount = 0;
-				for (RedditPost post : postList) { 
-					postCount = postCount + 1;
-					System.out.println("Post " + postCount + " de: " + postList.size());
+				for (RedditPost post : postList) {
+					try {
+						postCount = postCount + 1;
+						System.out.println("Passo 1: Post " + postCount + " de: " + postList.size());
 
-					/*
-					 * Deverá ser extraída a entidade e a opinião relacionada
-					 * com aquela entidade através do dependency parser
-					 */
-					/*
-					 * https://stackoverflow.com/questions/7443330/how-do-i-do-
-					 * dependency-parsing-in-nltk
-					 */
-					Annotation document = new Annotation(post.getBody());
-					pipeline.annotate(document);
-					List<CoreMap> sentences = document.get(SentencesAnnotation.class);
-					List<Sentence> dbSentences = new ArrayList<>();
-					for (CoreMap sentence : sentences) {
-						/*for (CoreLabel token : sentence.get(TokensAnnotation.class)) {
-							String word = token.get(TextAnnotation.class);
-							String pos = token.get(PartOfSpeechAnnotation.class);
-							String ne = token.get(NamedEntityTagAnnotation.class);
-							System.out.println(word + "->" + pos + "|" + ne);
+						List<Sentence> sentenceList = RedditManager.getAllSentencesByPost(post.getId());
+
+						for (Sentence dbSentence : sentenceList) {
+							System.out.println(dbSentence.getId() + " - " + dbSentence.getSentence());
+							targetList.addAll(extractTargetsUsingOpinions(dbSentence));
+
 						}
-						Tree tree = sentence.get(TreeAnnotation.class);*/
-
-						// this is the Stanford dependency graph of the current
-						// sentence
-						SemanticGraph sg = sentence.get(SemanticGraphCoreAnnotations.BasicDependenciesAnnotation.class);
-						Sentence dbSentence = new Sentence();
-						dbSentence.setPostId(post.getId());
-						dbSentence.setSentence(sentence.toString());
-						dbSentence.setWordDependencyList(
-								parseXML(sg.toString(SemanticGraph.OutputFormat.XML), dbSentence));
-						dbSentences.add(dbSentence);
-
+					} catch (OutOfMemoryError e) {
+						System.out.println(e);
 					}
-					RedditManager.saveSentenceDependency(dbSentences);
 				}
+				postCount = 0;
+				for (RedditPost post : postList) {
+					try {
+						postCount = postCount + 1;
+						System.out.println("Passo 2: Post " + postCount + " de: " + postList.size());
+						List<Sentence> sentenceList = RedditManager.getAllSentencesByPost(post.getId());
+
+						for (Sentence dbSentence : sentenceList) {
+							System.out.println(dbSentence.getId() + " - " + dbSentence.getSentence());
+							opinionList = extractOpinionsUsingTargets(dbSentence, targetList);
+
+						}
+					} catch (OutOfMemoryError e) {
+						System.out.println(e);
+					}
+				}
+				
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		RedditManager.shutdown();
-
 	}
 
-	private static List<WordDependency> parseXML(String xml, Sentence parentSentence) {
-		List<WordDependency> wordDep = new ArrayList<>();
+	/*TODO -> Refazer levando em consideração o tipo de dependencia*/
+	private static List<String> extractTargetsUsingOpinions(Sentence dbSentence) {
 
-		try {
-			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-			Document doc = dBuilder.parse(new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8.name())));
+		List<String> ruleList = new ArrayList();
+		for (WordDependency wd : dbSentence.getWordDependencyList()) {
+			if (English.WORD_VALENCE_DICTIONARY.containsKey(wd.getDependent())) {
+				edu.stanford.nlp.simple.Sentence sfSentence = new edu.stanford.nlp.simple.Sentence(
+						dbSentence.getSentence());
 
-			// optional, but recommended
-			// read this -
-			// http://stackoverflow.com/questions/13786607/normalization-in-dom-parsing-with-java-how-does-it-work
-			doc.getDocumentElement().normalize();
-			NodeList nList = doc.getElementsByTagName("dep");
-
-			for (int temp = 0; temp < nList.getLength(); temp++) {
-
-				Node nNode = nList.item(temp);
-
-				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-					WordDependency word = new WordDependency();
-					Element eElement = (Element) nNode;
-					word.setDependent(eElement.getElementsByTagName("dependent").item(0).getTextContent());
-					word.setDependentId(eElement.getElementsByTagName("dependent").item(0).getAttributes()
-							.getNamedItem("idx").getNodeValue());
-					word.setGovernor(eElement.getElementsByTagName("governor").item(0).getTextContent());
-					word.setGovernorId(eElement.getElementsByTagName("governor").item(0).getAttributes()
-							.getNamedItem("idx").getNodeValue());
-					word.setSentence(parentSentence);
-					wordDep.add(word);
+				// Regra 1.1
+				if (sfSentence.posTag(Integer.parseInt(wd.getGovernorId()) - 1).compareTo("NN") == 0) {
+					System.out.println("Regra 1.1: " + wd.getGovernor() + " -> " + wd.getDependent());
+					ruleList.add(wd.getGovernor());
 				}
+
+				// Regra 1.2
+				for (WordDependency wd2 : dbSentence.getWordDependencyList()) {
+					if ((wd2.getGovernorId().compareTo(wd.getGovernorId())==0) && (wd2.getId() != wd.getId())) {
+						try{
+							if (sfSentence.posTag(Integer.parseInt(wd2.getDependentId()) - 1).compareTo("NN") == 0) {
+								System.out.println("Regra 1.2: " + wd.getDependent() + " -> " + wd.getGovernor() + " <- "
+										+ wd2.getDependent());
+								ruleList.add(wd2.getDependent());
+								
+								
+							}
+						}catch(IndexOutOfBoundsException e){
+							System.out.println(e.toString());
+						}
+
+					}
+
+				}
+
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
-		return wordDep;
+		return ruleList;
 	}
 
+	/*TODO -> Refazer levando em consideração o tipo de dependencia*/
+	private static List<String> extractOpinionsUsingTargets(Sentence dbSentence, List<String> targetList) {
+
+		List<String> ruleList = new ArrayList();
+		for (WordDependency wd : dbSentence.getWordDependencyList()) {
+			if ((targetList.contains(wd.getGovernor())) && (!English.WORD_VALENCE_DICTIONARY.containsKey(wd.getDependent()))){
+				edu.stanford.nlp.simple.Sentence sfSentence = new edu.stanford.nlp.simple.Sentence(
+						dbSentence.getSentence());
+
+				// Regra 1.1
+				if (sfSentence.posTag(Integer.parseInt(wd.getDependentId()) - 1).compareTo("JJ") == 0) {
+					System.out.println("Regra 2.1: " + wd.getGovernor() + " -> " + wd.getDependent());
+					ruleList.add(wd.getDependent());
+				}
+
+				// Regra 1.2
+				for (WordDependency wd2 : dbSentence.getWordDependencyList()) {
+					if ((wd2.getGovernorId().compareTo(wd.getGovernorId())==0) && (wd2.getId() != wd.getId())) {
+						try{
+							if (sfSentence.posTag(Integer.parseInt(wd2.getDependentId()) - 1).compareTo("JJ") == 0) {
+								System.out.println("Regra 2.2: " + wd.getDependent() + " -> " + wd.getGovernor() + " <- "
+										+ wd2.getDependent());
+								ruleList.add(wd.getDependent());
+							}
+						}catch(IndexOutOfBoundsException e){
+							System.out.println(e.toString());
+						}
+
+					}
+
+				}
+
+			}
+		}
+		return ruleList;
+	}
 }

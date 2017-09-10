@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,7 +27,7 @@ public class Sentence {
 		this.sentence = sentence;
 	}
 
-	@OneToMany(mappedBy="id",cascade = CascadeType.ALL)
+	@OneToMany(mappedBy="sentence",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<WordDependency> wordDependencyList = new ArrayList<WordDependency>();
 
 	public List<WordDependency> getWordDependencyList() {

@@ -1,6 +1,7 @@
 package crawler.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,8 +17,15 @@ public class WordDependency {
 	private String dependentId;
 	private String governor;
 	private String governorId;
+	private String type;
 	
-	@ManyToOne
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="sentenceId")
 	private Sentence sentence;
 	
