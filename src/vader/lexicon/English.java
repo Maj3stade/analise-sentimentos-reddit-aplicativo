@@ -20,10 +20,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import crawler.entity.WordScore;
 
 /**
  * This class contains the constants that are the used by the sentiment analysis
@@ -169,6 +172,28 @@ public final class English
                     String currentText = lexFileData[0];
                     Float currentTextValence = Float.parseFloat(lexFileData[1]);
                     lexDictionary.put(currentText, currentTextValence);
+                }
+            } catch (IOException ioe) {
+                System.out.println(ioe);
+            }
+        }
+        return lexDictionary;
+    }
+    
+    public static List<WordScore> getWordValenceDictionaryObject() {
+        InputStream lexFile = LOADER.getResourceAsStream(LEXICON_FILE);
+        List<WordScore> lexDictionary = new ArrayList();
+        if (lexFile != null) {
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(lexFile))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    String[] lexFileData = line.split("\\t");
+                    String currentText = lexFileData[0];
+                    Float currentTextValence = Float.parseFloat(lexFileData[1]);
+                    WordScore word = new WordScore();
+                    word.setScore(currentTextValence);
+                    word.setWord(currentText);
+                    lexDictionary.add(word);
                 }
             } catch (IOException ioe) {
                 System.out.println(ioe);

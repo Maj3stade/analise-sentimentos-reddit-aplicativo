@@ -1,4 +1,4 @@
-package crawler;
+package runnables;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -42,7 +42,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-public class DictionaryDatabaseGenerator {
+public class GenerateSentencesAndDependency {
 
 	public static void main(String[] args) {
 
@@ -63,13 +63,13 @@ public class DictionaryDatabaseGenerator {
 					continue;
 				}
 
-				List<RedditPost> postList = RedditManager.getAllPostsByAuthor(author);
+				List<RedditPost> postList = RedditManager.getNotOkPostsByAuthor(author);
 				postCount = 0;
 				for (RedditPost post : postList) {
 					try {
 						postCount = postCount + 1;
-						System.out.println("Post " + postCount + " de: " + postList.size());
-						System.out.println(post.getId() + " : " + post.getBody());
+						/*System.out.println("Post " + postCount + " de: " + postList.size());
+						System.out.println(post.getId() + " : " + post.getBody());*/
 						/*
 						 * Deverá ser extraída a entidade e a opinião
 						 * relacionada com aquela entidade através do dependency
@@ -108,7 +108,7 @@ public class DictionaryDatabaseGenerator {
 							dbSentences.add(dbSentence);
 
 						}
-						System.out.println("Salvando sentença e dependencia.");
+						/*System.out.println("Salvando sentença e dependencia.");*/
 						RedditManager.saveSentenceDependency(dbSentences);
 					} catch (OutOfMemoryError  e) {
 						System.out.println(e);

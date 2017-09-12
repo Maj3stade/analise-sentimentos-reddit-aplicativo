@@ -1,13 +1,14 @@
-package crawler;
+package runnables;
 
 import java.util.Iterator;
 import java.util.List;
 
+import crawler.Requestor;
 import crawler.entity.RedditPost;
 import crawler.properties.RedditProperties;
 import manager.RedditManager;
 
-public class ThreadCrawler {
+public class CrawlThreads {
 
 	
 	public static void main(String[] args) {

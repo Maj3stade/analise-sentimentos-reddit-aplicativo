@@ -13,9 +13,11 @@ import javax.persistence.criteria.Root;
 
 import org.hibernate.criterion.Projections;
 
+import crawler.entity.Dictionary;
 import crawler.entity.RedditPost;
 import crawler.entity.RedditThread;
 import crawler.entity.Sentence;
+import crawler.entity.WordScore;
 
 public class RedditManager {
 	private static final String PERSISTENCE_UNIT_NAME = "PERSISTENCE";
@@ -97,6 +99,17 @@ public class RedditManager {
 
 		return sentenceList;
 	}
+	
+	public static List<Sentence> getAllSentences() {
+		EntityManager em = getEntityManagerFactory().createEntityManager();
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaQuery<Sentence> criteria = cb.createQuery(Sentence.class);
+		Root<Sentence> personRoot = criteria.from(Sentence.class);
+		List<Sentence> sentenceList = em.createQuery(criteria).getResultList();
+		em.close();
+
+		return sentenceList;
+	}
 
 	public static void saveThreads(List<RedditThread> threadList) {
 		EntityManager entityManager = getEntityManagerFactory().createEntityManager();
@@ -157,5 +170,34 @@ public class RedditManager {
 		entityManager.close();
 
 	}
+	
+	public static void saveDictionary(Dictionary dictionary){
+		EntityManager entityManager = getEntityManagerFactory().createEntityManager();
+		int i = 0;
+
+		entityManager.getTransaction().begin();
+		for (Iterator<WordScore> iterator = dictionary.getDictionary().iterator(); iterator.hasNext();) {
+			i++;
+
+			WordScore ws = iterator.next();
+			entityManager.persist(ws);
+
+
+		}
+		try {
+			entityManager.getTransaction().commit();
+		} catch (RollbackException e) {
+			System.out.println("Não foi possível salvar o dicionário.");
+		}
+		entityManager.close();
+	}
+
+	public static List<RedditPost> getAllPostsByThread(String parentId) {
+		List<RedditPost> postList = getEntityManagerFactory().createEntityManager()
+				.createQuery("SELECT rp FROM RedditPost rp where parentId = :parentId").setParameter("parentId", parentId).getResultList();
+
+		return postList;
+	}
+
 
 }

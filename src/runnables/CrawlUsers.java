@@ -1,15 +1,16 @@
-package crawler;
+package runnables;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Iterator;
 import java.util.List;
 
+import crawler.Requestor;
 import crawler.entity.RedditPost;
 import crawler.properties.RedditProperties;
 import manager.RedditManager;
 
-public class UserCrawler {
+public class CrawlUsers {
 
 	
 	public static void main(String[] args) {
