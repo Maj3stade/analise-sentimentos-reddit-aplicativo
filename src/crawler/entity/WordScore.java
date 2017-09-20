@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 @Entity
 public class WordScore {
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -23,7 +24,19 @@ public class WordScore {
 
 	private String rule;
 	
+	@Transient
+	private int sentenceId;
 	
+	
+	
+	public int getSentenceId() {
+		return sentenceId;
+	}
+
+	public void setSentenceId(int sentenceId) {
+		this.sentenceId = sentenceId;
+	}
+
 	public String getRule() {
 		return rule;
 	}

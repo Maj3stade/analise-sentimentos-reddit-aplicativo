@@ -283,7 +283,40 @@ public class RedditPost {
     @JsonIgnore
 	private Double valiantScore;
 
+
     @JsonIgnore
+	private Double valiantScoreDomain;
+    
+
+    @JsonIgnore
+	private Double valiantScoreAuthorDomain;
+    
+    
+    public Double getValiantScore() {
+		return valiantScore;
+	}
+
+	public void setValiantScore(Double valiantScore) {
+		this.valiantScore = valiantScore;
+	}
+
+	public Double getValiantScoreDomain() {
+		return valiantScoreDomain;
+	}
+
+	public void setValiantScoreDomain(Double valiantScoreDomain) {
+		this.valiantScoreDomain = valiantScoreDomain;
+	}
+
+	public Double getValiantScoreAuthorDomain() {
+		return valiantScoreAuthorDomain;
+	}
+
+	public void setValiantScoreAuthorDomain(Double valiantScoreAuthorDomain) {
+		this.valiantScoreAuthorDomain = valiantScoreAuthorDomain;
+	}
+
+	@JsonIgnore
 	@Transient
     private Boolean isCorrect;
 
