@@ -48,7 +48,7 @@ public final class EnglishAuthor
 		this.author = author;
 	}
     private static final ClassLoader LOADER = EnglishAuthor.class.getClassLoader();
-    private String author;
+    private static String author;
     private static final float BOOSTER_WORD_INCREMENT = 0.293f;
     private static final float DAMPENER_WORD_DECREMENT = -0.293f;
     private static final List<String> PUNCTUATION = Arrays.asList(

@@ -104,7 +104,20 @@ public class RedditManager {
 		em.close();
 		return authorList;
 	}
-	
+	public static void updateRedditPost(List<RedditPost> postList){
+		EntityManager entityManager = getEntityManagerFactory().createEntityManager();
+		entityManager.getTransaction().begin();
+
+		for (Iterator<RedditPost> iterator = postList.iterator(); iterator.hasNext();) {
+			RedditPost redditPost = iterator.next();
+
+			entityManager.merge(redditPost);
+
+		}
+
+		entityManager.getTransaction().commit();
+		entityManager.close();
+	   }
 	public static List<Sentence> getAllSentencesByPost(String postId) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		CriteriaBuilder cb = em.getCriteriaBuilder();

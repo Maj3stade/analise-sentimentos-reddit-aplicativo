@@ -44,9 +44,6 @@ import manager.RedditManager;
 public final class EnglishDomain
         implements Language {
 
-	public EnglishDomain(String author){
-		this.author = author;
-	}
     private static final ClassLoader LOADER = EnglishDomain.class.getClassLoader();
     private String author;
     private static final float BOOSTER_WORD_INCREMENT = 0.293f;

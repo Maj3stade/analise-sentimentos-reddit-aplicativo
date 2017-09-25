@@ -33,6 +33,8 @@ import edu.stanford.nlp.util.CoreMap;
 import manager.RedditManager;
 import vader.SentimentAnalysis;
 import vader.lexicon.English;
+import vader.lexicon.EnglishAuthor;
+import vader.lexicon.EnglishDomain;
 import vader.text.TokenizerEnglish;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -54,32 +56,20 @@ public class GenerateValenceScore {
 
 		try {
 			new RedditProperties();
-			/*List<String> sentences = new LinkedList<>() {{
-			    add("VADER is smart, handsome, and funny.");
-			    add("VADER is smart, handsome, and funny!");
-			    add("VADER is very smart, handsome, and funny.");
-			    add("VADER is VERY SMART, handsome, and FUNNY.");
-			    add("VADER is VERY SMART, handsome, and FUNNY!!!");
-			    add("VADER is VERY SMART, really handsome, and INCREDIBLY FUNNY!!!");
-			    add("The book was good.");
-			    add("The book was kind of good.");
-			    add("The plot was good, but the characters are uncompelling and the dialog is not great.");
-			    add("A really bad, horrible book.");
-			    add("At least it isn't a horrible book.");
-			    add(":) and :D");
-			    add("");
-			    add("Today sux");
-			    add("Today sux!");
-			    add("Today SUX!");
-			    add("Today kinda sux! But I'll get by, lol");
-			}};
+			List<RedditPost> postList = RedditManager.getAllPostsByThread("t3_5qqa51");
+			
+			SentimentAnalysis domainAnalysis = new SentimentAnalysis(new EnglishDomain(), new TokenizerEnglish());
+			SentimentAnalysis normalAnalysis = new SentimentAnalysis(new English(), new TokenizerEnglish());
+			
 
-			SentimentAnalysis sa = new SentimentAnalysis(new English(), new TokenizerEnglish());
-
-			for (String sentence : sentences) {
-			    System.out.println(sentence);
-			    System.out.println(sa.getSentimentAnalysis(sentence).toString());
-			}*/
+			for (RedditPost post : postList) {
+				SentimentAnalysis authorAnalysis = new SentimentAnalysis(new EnglishAuthor(post.getAuthor()), new TokenizerEnglish());
+			    System.out.println(post.getBody());
+			    System.out.println(normalAnalysis.getSentimentAnalysis(post.getBody()).get("compound").toString() + " - " + authorAnalysis.getSentimentAnalysis(post.getBody()).get("compound").toString() + " - " + domainAnalysis.getSentimentAnalysis(post.getBody()).get("compound").toString());
+			    post.setValiantScoreAuthorDomain(new Double (authorAnalysis.getSentimentAnalysis(post.getBody()).get("compound")));
+			    post.setValiantScoreDomain(new Double (domainAnalysis.getSentimentAnalysis(post.getBody()).get("compound")));
+			}
+			RedditManager.updateRedditPost(postList);
 
 		} catch (Exception e) {
 			e.printStackTrace();

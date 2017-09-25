@@ -319,6 +319,16 @@ public class RedditPost {
 	@JsonIgnore
 	@Transient
     private Boolean isCorrect;
+	
+
+	@JsonIgnore
+	@Transient
+    private Boolean isCorrectDomain;
+	
+
+	@JsonIgnore
+	@Transient
+    private Boolean isCorrectAuthorDomain;
 
     @JsonProperty("contest_mode")
     public Boolean getContestMode() {
