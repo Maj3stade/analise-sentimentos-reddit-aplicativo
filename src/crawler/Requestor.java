@@ -61,8 +61,7 @@ public class Requestor {
 		return result.toString();
 
 	}
-	
-	
+
 	private static List<RedditThread> getThreadsByJson(String json) throws Exception {
 		List<RedditThread> threadList = new ArrayList<RedditThread>();
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -89,6 +88,7 @@ public class Requestor {
 		ObjectMapper objectMapper = new ObjectMapper();
 		JsonNode node = objectMapper.readValue(getRedditJson(url, ""), JsonNode.class);
 		Iterator<JsonNode> postsIterator = node.elements();
+		int i =0;
 		while (postsIterator.hasNext()) {
 
 			JsonNode postsNode = (JsonNode) postsIterator.next();
@@ -106,12 +106,15 @@ public class Requestor {
 					if (iteratorPost.get("kind").toString().equals("\"t1\"")) {
 						postList.add(post);
 					}
+					postList.addAll(getReplies(iteratorPost, thread));
 
-					if (post.getChildren() != null)
+					/*if (post.getChildren() != null)
 						for (String childPost : post.getChildren()) {
 							postList.addAll(
+									
 									getPosts(RedditProperties.HTTPS_REDDIT + thread.getPermalink() + childPost));
-						}
+						}*/
+
 				}
 			} else {
 				List<RedditThread> threadList = getThreadsByJson(postsNode.toString());
@@ -122,8 +125,7 @@ public class Requestor {
 		}
 		return postList;
 	}
-	
-	
+
 	public static List<RedditPost> getUserPosts(String url, String parameter) throws Exception {
 		RedditThread thread = new RedditThread();
 		List<RedditPost> postList = new ArrayList<RedditPost>();
@@ -131,12 +133,12 @@ public class Requestor {
 		JsonNode node = objectMapper.readValue(getRedditJson(url, parameter), JsonNode.class);
 		Iterator<JsonNode> postsIterator = node.elements();
 		Pattern p = Pattern.compile("^[&gt].*", Pattern.MULTILINE);
-	    
+
 		while (postsIterator.hasNext()) {
 
 			JsonNode postsNode = (JsonNode) postsIterator.next();
 			if (!postsIterator.hasNext()) {
-				
+
 				JsonNode postContentNode = postsNode.get("children");
 				Iterator<JsonNode> postIterator = postContentNode.elements();
 
@@ -145,7 +147,7 @@ public class Requestor {
 
 					RedditPost post = objectMapper.readValue(iteratorPost.get("data").toString(), RedditPost.class);
 					if (iteratorPost.get("kind").toString().equals("\"t1\"")) {
-						
+
 						post.setBody(p.matcher(post.getBody()).replaceAll(""));
 						postList.add(post);
 					}
@@ -157,12 +159,43 @@ public class Requestor {
 				}
 				JsonNode after = postsNode.get("after");
 				if (after.toString() != "null")
-					postList.addAll(getUserPosts(url, "after=" + after.toString().substring(1, after.toString().length()-1)));
+					postList.addAll(
+							getUserPosts(url, "after=" + after.toString().substring(1, after.toString().length() - 1)));
 			}
 		}
-		System.out.println("#Size: " + postList.size());
 		return postList;
 	}
-	
+
+	private static List<RedditPost> getReplies(JsonNode iteratorPost, RedditThread thread) throws Exception {
+		List<RedditPost> postList = new ArrayList();
+		ObjectMapper objectMapper = new ObjectMapper();
+		JsonNode newReply;
+		// System.out.println(iteratorPost);
+
+		RedditPost post = objectMapper.readValue(iteratorPost.get("data").toString(), RedditPost.class);
+		if (post.getChildren() != null)
+			for (String childPost : post.getChildren()) {
+				postList.addAll(getPosts(RedditProperties.HTTPS_REDDIT + thread.getPermalink() + childPost));
+			}
+		else if (iteratorPost.get("data").get("replies").get("data") != null) {
+			JsonNode repliesNode = iteratorPost.get("data").get("replies").get("data").get("children");
+			Iterator<JsonNode> replyIterator = repliesNode.elements();
+			while (replyIterator.hasNext()) {
+				JsonNode replyPost = (JsonNode) replyIterator.next();
+				RedditPost reply = objectMapper.readValue(replyPost.get("data").toString(), RedditPost.class);
+				if (replyPost.get("kind").toString().equals("\"t1\"")) {
+					postList.add(reply);
+				}
+				newReply = replyPost.get("data").get("replies");
+				postList.addAll(getReplies(replyPost, thread));
+				/*if (reply.getChildren() != null)
+					for (String childPost : reply.getChildren()) {
+						System.out.println("AQUI");
+						postList.addAll(getPosts(RedditProperties.HTTPS_REDDIT + thread.getPermalink() + childPost));
+					}*/
+			}
+		}
+		return postList;
+	}
 
 }

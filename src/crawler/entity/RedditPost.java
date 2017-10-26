@@ -124,7 +124,6 @@ public class RedditPost {
     private Boolean saved;
     @JsonProperty("id")
     @Id
-    
     private String id;
     @JsonProperty("view_count")
     
@@ -329,8 +328,19 @@ public class RedditPost {
 	@JsonIgnore
 	@Transient
     private Boolean isCorrectAuthorDomain;
+	
+	@JsonIgnore
+	private String threadId;
 
-    @JsonProperty("contest_mode")
+    public String getThreadId() {
+		return threadId;
+	}
+
+	public void setThreadId(String threadId) {
+		this.threadId = threadId;
+	}
+
+	@JsonProperty("contest_mode")
     public Boolean getContestMode() {
         return contestMode;
     }

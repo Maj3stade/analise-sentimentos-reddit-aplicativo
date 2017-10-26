@@ -42,7 +42,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-public class GenerateSentencesAndDependency2 {
+public class GenerateSentencesAndDependencyByContext {
 
 	public static void main(String[] args) {
 
@@ -52,11 +52,11 @@ public class GenerateSentencesAndDependency2 {
 			props.setProperty("annotators", "tokenize, ssplit, pos, depparse");
 			StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
 
-			List<RedditPost> postList = RedditManager.getAllPostsByThread("t3_4d75i7");
-			postList.addAll(RedditManager.getAllPostsByThread("t3_5exz2e"));
-			postList.addAll(RedditManager.getAllPostsByThread("t3_67ivae"));
-			postList.addAll(RedditManager.getAllPostsByThread("t3_6cqdye"));
-			postList.addAll(RedditManager.getAllPostsByThread("t3_5uzetf"));
+			List<RedditPost> postList = RedditManager.getAllPostsByParentId("t3_4d75i7");
+			postList.addAll(RedditManager.getAllPostsByParentId("t3_5exz2e"));
+			postList.addAll(RedditManager.getAllPostsByParentId("t3_67ivae"));
+			postList.addAll(RedditManager.getAllPostsByParentId("t3_6cqdye"));
+			postList.addAll(RedditManager.getAllPostsByParentId("t3_5uzetf"));
 			int postCount = 0;
 			for (RedditPost post : postList) {
 				try {

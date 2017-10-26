@@ -53,7 +53,7 @@ public class CustomSentiment {
 
 		try {
 			new RedditProperties();
-			List<RedditPost> postList = RedditManager.getAllPostsByThread("t3_5qqa51");
+			List<RedditPost> postList = RedditManager.getAllPostsByParentId("t3_5qqa51");
 			
 			SentimentAnalysis domainAnalysis = new SentimentAnalysis(new EnglishDomain(), new TokenizerEnglish());
 			SentimentAnalysis normalAnalysis = new SentimentAnalysis(new English(), new TokenizerEnglish());

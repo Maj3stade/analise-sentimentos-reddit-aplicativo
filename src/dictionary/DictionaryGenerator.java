@@ -33,7 +33,7 @@ public class DictionaryGenerator {
 
 		/*
 		 * for (RedditPost post :
-		 * RedditManager.getAllPostsByThread("t3_5qqa51")) {
+		 * RedditManager.getAllPostsByParentId("t3_5qqa51")) {
 		 * sentenceList.addAll(RedditManager.getAllSentencesByPost(post.getId())
 		 * ); }
 		 */
@@ -46,22 +46,22 @@ public class DictionaryGenerator {
 
 		authorCount = authorCount + 1;
 
-		for (RedditPost post : RedditManager.getAllPostsByThread("t3_4d75i7")) {
+		for (RedditPost post : RedditManager.getAllPostsByParentId("t3_4d75i7")) {
 			sentenceList.addAll(RedditManager.getAllSentencesByPost(post.getId()));
 		}
-		for (RedditPost post : RedditManager.getAllPostsByThread("t3_5exz2e")) {
+		for (RedditPost post : RedditManager.getAllPostsByParentId("t3_5exz2e")) {
 			sentenceList.addAll(RedditManager.getAllSentencesByPost(post.getId()));
 		}
-		for (RedditPost post : RedditManager.getAllPostsByThread("t3_67ivae")) {
+		for (RedditPost post : RedditManager.getAllPostsByParentId("t3_67ivae")) {
 			sentenceList.addAll(RedditManager.getAllSentencesByPost(post.getId()));
 		}
-		for (RedditPost post : RedditManager.getAllPostsByThread("t3_6cqdye")) {
+		for (RedditPost post : RedditManager.getAllPostsByParentId("t3_6cqdye")) {
 			sentenceList.addAll(RedditManager.getAllSentencesByPost(post.getId()));
 		}
-		for (RedditPost post : RedditManager.getAllPostsByThread("t3_5uzetf")) {
+		for (RedditPost post : RedditManager.getAllPostsByParentId("t3_5uzetf")) {
 			sentenceList.addAll(RedditManager.getAllSentencesByPost(post.getId()));
 		}
-		for (RedditPost post : RedditManager.getAllPostsByThread("t3_5qqa51")) {
+		for (RedditPost post : RedditManager.getAllPostsByParentId("t3_5qqa51")) {
 			sentenceList.addAll(RedditManager.getAllSentencesByPost(post.getId()));
 		}
 
@@ -128,7 +128,7 @@ public class DictionaryGenerator {
 
 		/*
 		 * for (RedditPost post :
-		 * RedditManager.getAllPostsByThread("t3_5qqa51")) {
+		 * RedditManager.getAllPostsByParentId("t3_5qqa51")) {
 		 * sentenceList.addAll(RedditManager.getAllSentencesByPost(post.getId())
 		 * ); }
 		 */

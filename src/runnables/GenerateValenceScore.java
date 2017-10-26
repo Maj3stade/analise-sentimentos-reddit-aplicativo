@@ -56,7 +56,7 @@ public class GenerateValenceScore {
 
 		try {
 			new RedditProperties();
-			List<RedditPost> postList = RedditManager.getAllPostsByThread("t3_5qqa51");
+			List<RedditPost> postList = RedditManager.getAllPosts();
 			
 			SentimentAnalysis domainAnalysis = new SentimentAnalysis(new EnglishDomain(), new TokenizerEnglish());
 			SentimentAnalysis normalAnalysis = new SentimentAnalysis(new English(), new TokenizerEnglish());
@@ -65,9 +65,9 @@ public class GenerateValenceScore {
 			for (RedditPost post : postList) {
 				SentimentAnalysis authorAnalysis = new SentimentAnalysis(new EnglishAuthor(post.getAuthor()), new TokenizerEnglish());
 			    System.out.println(post.getBody());
-			    System.out.println(normalAnalysis.getSentimentAnalysis(post.getBody()).get("compound").toString() + " - " + authorAnalysis.getSentimentAnalysis(post.getBody()).get("compound").toString() + " - " + domainAnalysis.getSentimentAnalysis(post.getBody()).get("compound").toString());
 			    post.setValiantScoreAuthorDomain(new Double (authorAnalysis.getSentimentAnalysis(post.getBody()).get("compound")));
 			    post.setValiantScoreDomain(new Double (domainAnalysis.getSentimentAnalysis(post.getBody()).get("compound")));
+			    post.setValiantScore(new Double (normalAnalysis.getSentimentAnalysis(post.getBody()).get("compound")));
 			}
 			RedditManager.updateRedditPost(postList);
 

@@ -16,9 +16,10 @@ public class CrawlThreads {
 		try {
 			new RedditProperties();
 			for (Iterator<String> iterator = RedditProperties.SELECTED_THREADS.iterator(); iterator.hasNext();) {
-				List<RedditPost> postList = Requestor.getPosts(RedditProperties.HTTPS_REDDIT + (String) iterator.next());
+				String threadId = (String) iterator.next();
+				List<RedditPost> postList = Requestor.getPosts(RedditProperties.HTTPS_REDDIT + threadId);
 				System.out.println("Comentarios " + postList.size());
-				RedditManager.savePosts(postList);
+				RedditManager.savePosts(postList, threadId);
 			}
 			RedditManager.shutdown();
 			

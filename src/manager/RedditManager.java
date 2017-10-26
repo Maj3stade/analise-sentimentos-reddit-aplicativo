@@ -13,6 +13,7 @@ import javax.persistence.criteria.Root;
 
 import org.hibernate.criterion.Projections;
 
+import crawler.entity.AuthorOpinion;
 import crawler.entity.Dictionary;
 import crawler.entity.RedditPost;
 import crawler.entity.RedditThread;
@@ -45,16 +46,18 @@ public class RedditManager {
 	public static List<RedditPost> getAllPostsByAuthor(String author) {
 
 		List<RedditPost> postList = getEntityManagerFactory().createEntityManager()
-				.createQuery("SELECT rp FROM RedditPost rp where author = :author").setParameter("author", author).getResultList();
-		
-		
-		/*EntityManager em = getEntityManagerFactory().createEntityManager();
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<RedditPost> criteria = cb.createQuery(RedditPost.class);
-		Root<RedditPost> personRoot = criteria.from(RedditPost.class);
-		criteria.where(cb.equal(personRoot.get("author"), author));
-		criteria.
-		List<RedditPost> postList = em.createQuery(criteria).getResultList();*/
+				.createQuery("SELECT rp FROM RedditPost rp where author = :author").setParameter("author", author)
+				.getResultList();
+
+		/*
+		 * EntityManager em = getEntityManagerFactory().createEntityManager();
+		 * CriteriaBuilder cb = em.getCriteriaBuilder();
+		 * CriteriaQuery<RedditPost> criteria =
+		 * cb.createQuery(RedditPost.class); Root<RedditPost> personRoot =
+		 * criteria.from(RedditPost.class);
+		 * criteria.where(cb.equal(personRoot.get("author"), author)); criteria.
+		 * List<RedditPost> postList = em.createQuery(criteria).getResultList();
+		 */
 
 		return postList;
 	}
@@ -62,37 +65,62 @@ public class RedditManager {
 	public static List<RedditPost> getAllNotOkPostsByAuthor(String author) {
 
 		List<RedditPost> postList = getEntityManagerFactory().createEntityManager()
-				.createQuery("SELECT rp FROM RedditPost rp where author = :author and NOT EXISTS (SELECT ws FROM WordScore ws WHERE  ws.author = rp.author)").setParameter("author", author).getResultList();
-		
-		
-		/*EntityManager em = getEntityManagerFactory().createEntityManager();
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<RedditPost> criteria = cb.createQuery(RedditPost.class);
-		Root<RedditPost> personRoot = criteria.from(RedditPost.class);
-		criteria.where(cb.equal(personRoot.get("author"), author));
-		criteria.
-		List<RedditPost> postList = em.createQuery(criteria).getResultList();*/
+				.createQuery(
+						"SELECT rp FROM RedditPost rp where author = :author and NOT EXISTS (SELECT ws FROM WordScore ws WHERE  ws.author = rp.author)")
+				.setParameter("author", author).getResultList();
+
+		/*
+		 * EntityManager em = getEntityManagerFactory().createEntityManager();
+		 * CriteriaBuilder cb = em.getCriteriaBuilder();
+		 * CriteriaQuery<RedditPost> criteria =
+		 * cb.createQuery(RedditPost.class); Root<RedditPost> personRoot =
+		 * criteria.from(RedditPost.class);
+		 * criteria.where(cb.equal(personRoot.get("author"), author)); criteria.
+		 * List<RedditPost> postList = em.createQuery(criteria).getResultList();
+		 */
 
 		return postList;
 	}
 	
+	public static List<RedditPost> getAllNotOkPosts() {
+
+		List<RedditPost> postList = getEntityManagerFactory().createEntityManager()
+				.createQuery(
+						"SELECT rp FROM RedditPost rp where NOT EXISTS (SELECT ws FROM Sentence ws WHERE ws.postId = rp.id)").getResultList();
+
+		/*
+		 * EntityManager em = getEntityManagerFactory().createEntityManager();
+		 * CriteriaBuilder cb = em.getCriteriaBuilder();
+		 * CriteriaQuery<RedditPost> criteria =
+		 * cb.createQuery(RedditPost.class); Root<RedditPost> personRoot =
+		 * criteria.from(RedditPost.class);
+		 * criteria.where(cb.equal(personRoot.get("author"), author)); criteria.
+		 * List<RedditPost> postList = em.createQuery(criteria).getResultList();
+		 */
+
+		return postList;
+	}
+
 	public static List<RedditPost> getNotOkPostsByAuthor(String author) {
 
 		List<RedditPost> postList = getEntityManagerFactory().createEntityManager()
-				.createQuery("SELECT rp FROM RedditPost rp where author = :author and NOT EXISTS (SELECT sc FROM Sentence sc WHERE  sc.postId = rp.id)").setParameter("author", author).getResultList();
-		
-		
-		/*EntityManager em = getEntityManagerFactory().createEntityManager();
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<RedditPost> criteria = cb.createQuery(RedditPost.class);
-		Root<RedditPost> personRoot = criteria.from(RedditPost.class);
-		criteria.where(cb.equal(personRoot.get("author"), author));
-		criteria.
-		List<RedditPost> postList = em.createQuery(criteria).getResultList();*/
+				.createQuery(
+						"SELECT rp FROM RedditPost rp where author = :author and NOT EXISTS (SELECT sc FROM Sentence sc WHERE  sc.postId = rp.id)")
+				.setParameter("author", author).getResultList();
+
+		/*
+		 * EntityManager em = getEntityManagerFactory().createEntityManager();
+		 * CriteriaBuilder cb = em.getCriteriaBuilder();
+		 * CriteriaQuery<RedditPost> criteria =
+		 * cb.createQuery(RedditPost.class); Root<RedditPost> personRoot =
+		 * criteria.from(RedditPost.class);
+		 * criteria.where(cb.equal(personRoot.get("author"), author)); criteria.
+		 * List<RedditPost> postList = em.createQuery(criteria).getResultList();
+		 */
 
 		return postList;
 	}
-	
+
 	public static List<String> getAllAuthorsByParentId(String parentId) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -104,7 +132,8 @@ public class RedditManager {
 		em.close();
 		return authorList;
 	}
-	public static void updateRedditPost(List<RedditPost> postList){
+
+	public static void updateRedditPost(List<RedditPost> postList) {
 		EntityManager entityManager = getEntityManagerFactory().createEntityManager();
 		entityManager.getTransaction().begin();
 
@@ -117,7 +146,8 @@ public class RedditManager {
 
 		entityManager.getTransaction().commit();
 		entityManager.close();
-	   }
+	}
+
 	public static List<Sentence> getAllSentencesByPost(String postId) {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -129,7 +159,7 @@ public class RedditManager {
 
 		return sentenceList;
 	}
-	
+
 	public static List<Sentence> getAllSentences() {
 		EntityManager em = getEntityManagerFactory().createEntityManager();
 		CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -144,20 +174,23 @@ public class RedditManager {
 	public static List<Sentence> getAllNotOkSentencesByAuthor(String author) {
 
 		List<Sentence> postList = getEntityManagerFactory().createEntityManager()
-				.createQuery("SELECT st FROM Sentence st where EXISTS (SELECT rp FROM RedditPost rp WHERE  rp.id = st.postId and rp.author = :author and NOT EXISTS (SELECT ws FROM WordScore ws WHERE  ws.author = rp.author))").setParameter("author", author).getResultList();
-		
-		
-		/*EntityManager em = getEntityManagerFactory().createEntityManager();
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-		CriteriaQuery<RedditPost> criteria = cb.createQuery(RedditPost.class);
-		Root<RedditPost> personRoot = criteria.from(RedditPost.class);
-		criteria.where(cb.equal(personRoot.get("author"), author));
-		criteria.
-		List<RedditPost> postList = em.createQuery(criteria).getResultList();*/
+				.createQuery(
+						"SELECT st FROM Sentence st where EXISTS (SELECT rp FROM RedditPost rp WHERE  rp.id = st.postId and rp.author = :author and NOT EXISTS (SELECT ws FROM WordScore ws WHERE  ws.author = rp.author))")
+				.setParameter("author", author).getResultList();
+
+		/*
+		 * EntityManager em = getEntityManagerFactory().createEntityManager();
+		 * CriteriaBuilder cb = em.getCriteriaBuilder();
+		 * CriteriaQuery<RedditPost> criteria =
+		 * cb.createQuery(RedditPost.class); Root<RedditPost> personRoot =
+		 * criteria.from(RedditPost.class);
+		 * criteria.where(cb.equal(personRoot.get("author"), author)); criteria.
+		 * List<RedditPost> postList = em.createQuery(criteria).getResultList();
+		 */
 
 		return postList;
 	}
-	
+
 	public static void saveThreads(List<RedditThread> threadList) {
 		EntityManager entityManager = getEntityManagerFactory().createEntityManager();
 		entityManager.getTransaction().begin();
@@ -166,6 +199,21 @@ public class RedditManager {
 			RedditThread redditThread = iterator.next();
 
 			entityManager.persist(redditThread);
+
+		}
+
+		entityManager.getTransaction().commit();
+		entityManager.close();
+	}
+
+	public static void saveOpinions(List<AuthorOpinion> opinionList) {
+		EntityManager entityManager = getEntityManagerFactory().createEntityManager();
+		entityManager.getTransaction().begin();
+
+		for (Iterator<AuthorOpinion> iterator = opinionList.iterator(); iterator.hasNext();) {
+			AuthorOpinion opinion = iterator.next();
+
+			entityManager.persist(opinion);
 
 		}
 
@@ -195,69 +243,77 @@ public class RedditManager {
 
 	}
 
-	public static void savePosts(List<RedditPost> postList) {
+	public static void savePosts(List<RedditPost> postList, String threadId) {
 		EntityManager entityManager = getEntityManagerFactory().createEntityManager();
+		
 		int i = 0;
 
 		for (Iterator<RedditPost> iterator = postList.iterator(); iterator.hasNext();) {
 			i++;
-			System.out.println("Comentário " + Integer.toString(i) + " de " + Integer.toString((postList.size())));
-			entityManager.getTransaction().begin();
-
 			RedditPost redditThread = iterator.next();
-
-			entityManager.persist(redditThread);
+			redditThread.setThreadId(threadId);
+			entityManager.getTransaction().begin();
 			try {
+				entityManager.persist(redditThread);
 				entityManager.getTransaction().commit();
-			} catch (RollbackException e) {
-				System.out.println("Não foi possível salvar o comentário.");
+			} catch (javax.persistence.EntityExistsException e) {
+				System.out.println(redditThread.getId() + "-Comentário " + Integer.toString(i) + " de "
+						+ Integer.toString((postList.size())));
+				System.out.println("Comentário já existente.");
+			}
+			catch (RollbackException e) {
+				System.out.println("Não foi possível salvar o comentário");
+				e.printStackTrace();
+				
+			}
+		}
+		
+		entityManager.close();
+
+	}
+	
+	public static void savePosts(List<RedditPost> postList) {
+		savePosts(postList, "");
+	}
+	
+
+	public static void saveDictionary(Dictionary dictionary) {
+		EntityManager entityManager = getEntityManagerFactory().createEntityManager();
+		int i = 0;
+
+		entityManager.getTransaction().begin();
+		for (Iterator<WordScore> iterator = dictionary.getDictionary().iterator(); iterator.hasNext();) {
+			i++;
+
+			WordScore ws = iterator.next();
+			entityManager.persist(ws);
+
+		}
+		try {
+			entityManager.getTransaction().commit();
+		} catch (RollbackException e) {
+			System.out.println("Não foi possível salvar o dicionário.");
+		}
+		entityManager.close();
+	}
+
+	public static void saveDictionary(Dictionary dictionary, String author) {
+		EntityManager entityManager = getEntityManagerFactory().createEntityManager();
+		int i = 0;
+
+		entityManager.getTransaction().begin();
+		for (Iterator<WordScore> iterator = dictionary.getDictionary().iterator(); iterator.hasNext();) {
+			i++;
+
+			WordScore ws = iterator.next();
+			ws.setAuthor(author);
+			try {
+				entityManager.persist(ws);
+			} catch (javax.persistence.PersistenceException e) {
+				System.out.println("Não foi possível salvar a palavra: " + ws.getWord());
 			}
 
 		}
-		entityManager.close();
-
-	}
-	
-	public static void saveDictionary(Dictionary dictionary){
-		EntityManager entityManager = getEntityManagerFactory().createEntityManager();
-		int i = 0;
-
-		entityManager.getTransaction().begin();
-		for (Iterator<WordScore> iterator = dictionary.getDictionary().iterator(); iterator.hasNext();) {
-			i++;
-
-			WordScore ws = iterator.next();
-			entityManager.persist(ws);
-
-
-		}
-		try {
-			entityManager.getTransaction().commit();
-		} catch (RollbackException e) {
-			System.out.println("Não foi possível salvar o dicionário.");
-		}
-		entityManager.close();
-	}
-	
-	public static void saveDictionary(Dictionary dictionary, String author){
-		EntityManager entityManager = getEntityManagerFactory().createEntityManager();
-		int i = 0;
-
-		entityManager.getTransaction().begin();
-		for (Iterator<WordScore> iterator = dictionary.getDictionary().iterator(); iterator.hasNext();) {
-			i++;
-
-			
-			WordScore ws = iterator.next();
-			ws.setAuthor(author);
-			try{
-			entityManager.persist(ws);
-		} catch (javax.persistence.PersistenceException e) {
-			System.out.println("Não foi possível salvar a palavra: " + ws.getWord());
-		}
-
-
-		}
 		try {
 			entityManager.getTransaction().commit();
 		} catch (RollbackException e) {
@@ -266,21 +322,29 @@ public class RedditManager {
 		entityManager.close();
 	}
 
-
-	public static List<RedditPost> getAllPostsByThread(String parentId) {
+	public static List<RedditPost> getAllPostsByParentId(String parentId) {
 		List<RedditPost> postList = getEntityManagerFactory().createEntityManager()
-				.createQuery("SELECT rp FROM RedditPost rp where parentId = :parentId").setParameter("parentId", parentId).getResultList();
+				.createQuery("SELECT rp FROM RedditPost rp where parentId = :parentId")
+				.setParameter("parentId", parentId).getResultList();
+
+		return postList;
+	}
+	
+	public static List<RedditPost> getAllPostsByThreadId(String threadId) {
+		List<RedditPost> postList = getEntityManagerFactory().createEntityManager()
+				.createQuery("SELECT rp FROM RedditPost rp where threadId = :threadId")
+				.setParameter("threadId", threadId).getResultList();
 
 		return postList;
 	}
 
 	public static List<WordScore> getAllWordScoreByAuthor(String author) {
 		List<WordScore> wordScoreList = getEntityManagerFactory().createEntityManager()
-				.createQuery("SELECT ws FROM WordScore ws where author = :author").setParameter("author", author).getResultList();
+				.createQuery("SELECT ws FROM WordScore ws where author = :author").setParameter("author", author)
+				.getResultList();
 
 		return wordScoreList;
 	}
-	
 
 	public static List<WordScore> getAllDomainWordScore() {
 		List<WordScore> wordScoreList = getEntityManagerFactory().createEntityManager()
@@ -288,6 +352,5 @@ public class RedditManager {
 
 		return wordScoreList;
 	}
-
 
 }

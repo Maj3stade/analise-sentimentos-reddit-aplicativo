@@ -42,24 +42,34 @@ import java.io.File;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-public class GenerateSentencesAndDependency {
+public class GenerateSentencesAndDependencyByAuthor {
 
 	public static void main(String[] args) {
 
 		try {
 			new RedditProperties();
-			int postCount = 0;
+			List<String> authorList = RedditManager.getAllAuthorsByParentId("t3_5qqa51");
+			int authorCount = 0, postCount = 0;
 			Properties props = new Properties();
 			props.setProperty("annotators", "tokenize, ssplit, pos, depparse");
 			StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
 
-			List<RedditPost> postList = RedditManager.getAllNotOkPosts();
-			postCount = 0;
-			for (RedditPost post : postList) {
+			for (String author : authorList) {
+				authorCount = authorCount + 1;
+				System.out.println("Autor " + authorCount + " de: " + authorList.size());
+
+				if (author.equals("[deleted]")) {
+					System.out.println("Autor Removido.");
+					continue;
+				}
+
+				List<RedditPost> postList = RedditManager.getNotOkPostsByAuthor(author);
+				postCount = 0;
+				for (RedditPost post : postList) {
 					try {
 						postCount = postCount + 1;
-						System.out.println("Post " + postCount + " de: " + postList.size());
-						/*System.out.println(post.getId() + " : " + post.getBody());*/
+						/*System.out.println("Post " + postCount + " de: " + postList.size());
+						System.out.println(post.getId() + " : " + post.getBody());*/
 						/*
 						 * Deverá ser extraída a entidade e a opinião
 						 * relacionada com aquela entidade através do dependency
@@ -89,7 +99,7 @@ public class GenerateSentencesAndDependency {
 							// current
 							// sentence
 							SemanticGraph sg = sentence
-									.get(SemanticGraphCoreAnnotations.EnhancedDependenciesAnnotation.class);
+									.get(SemanticGraphCoreAnnotations.BasicDependenciesAnnotation.class);
 							Sentence dbSentence = new Sentence();
 							dbSentence.setPostId(post.getId());
 							dbSentence.setSentence(sentence.toString());
@@ -104,6 +114,7 @@ public class GenerateSentencesAndDependency {
 						System.out.println(e);
 					}
 				}
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
